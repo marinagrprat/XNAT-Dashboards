@@ -1,6 +1,5 @@
-from save_endpoint import save_to_pickle, save_to_db
+from save_endpoint import save_to_db
 import json
-from tqdm import tqdm
 import argparse
 
 
@@ -15,22 +14,11 @@ class DownloadResources:
         with open(self.role) as json_file:
             user = json.load(json_file)
 
-        self.__save_to_PK(
+        self.__save_to_DB(
             user['username'], user['password'],
-            user['server'], user['ssl'])
+            user['server'], user['ssl'], False)
 
         print("saved")
-
-    def __save_to_PK(self, username, password, server, ssl):
-
-        pk_saver = save_to_pickle.SaveToPk(
-            username,
-            password,
-            server,
-            ssl)
-
-        pk_saver.save_data()
-        pk_saver.save_resources()
 
     def __save_to_DB(self, username, password, server, ssl, test):
 
