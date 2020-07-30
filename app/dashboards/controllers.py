@@ -1,16 +1,11 @@
 # Import flask dependencies
 from flask import Blueprint, render_template, session, request,\
     redirect, url_for
-from saved_data_processing import graph_generator_DB, graph_generator_pp_DB
 from realtime_data_processing import graph_generator_pp, graph_generator
-from app.init_database import mongo
-from app.dashboards import model
-
 
 # Define the blueprint: 'dashboards', set its url prefix: app.url/dashboards
 dashboards = Blueprint('dashboards', __name__, url_prefix='/dashboards')
 
-pickle_saver = True  # Initially True as pickle saving is default
 graph_data_stats = []  # Contains graph Data loaded globally for get request
 project_lists = []  # Contains project list globally for get request
 username = ''  # For saving username globally

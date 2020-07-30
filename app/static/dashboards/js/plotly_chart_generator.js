@@ -1,4 +1,5 @@
 // Generate Charts using the json provided from html jinja
+
 stack_count = {"Stats": false,
                "Sessions types/Project":true,
                "Imaging Sessions": false,
@@ -14,14 +15,7 @@ stack_count = {"Stats": false,
                "Scan Types":false,
                "XSI Scan Types": false,
                "Scans/Project": false, 
-               "Scans/Subject": false, 
-               "Resources/Project": false,
-               "Resource Types": false,
-               "Resources/Session":false,
-               "UsableT1": false,
-               "Archiving Validator": false,
-               "Version Distribution": false,
-               "BBRC validator": false};
+               "Scans/Subject": false};
 
 
 function chart_generator(json){
@@ -52,7 +46,7 @@ function chart_generator(json){
         color = graph_info['color'];
 
         delete graph_info['color'];
-        delete graph_info['graph_descriptor'];
+        delete graph_info['graph descriptor'];
         delete graph_info['graph_type'];
         delete graph_info['id'];
     }
@@ -69,134 +63,119 @@ function chart_generator(json){
     }else if(graph_type == 'line'){
         linechart_generator(graph_name, graph_info, id, color);
     }
-    
 }  
 
 // Code for generating random values for RGB
-function getRandomColor() {
-
-    min = Math.ceil(0);
-    max = Math.floor(255);
-
-    r = Math.floor(Math.random() * (max - min + 1)) + min;
-    g = Math.floor(Math.random() * (max - min + 1)) + min;
-    b = Math.floor(Math.random() * (max - min + 1)) + min;
-
-    color = 'rgb('+r+','+g+','+b+')';
-    return color;
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Code for barchart
-function barchart_generator(graph_name, graph_info, id, color){
-
+function barchart_generator(graph_name, graph_info, id){
     if(stack_count[graph_name]){
         
-        data = []
-
-        x_axis = []
-        for(x in graph_info['count']){
-            x_axis.push(x);
-        }
-
-        differ_keys = []
-
-        for(x in graph_info['count']){
-            for(y in graph_info['count'][x]){
-                if(differ_keys.includes(y)){
+        data = [];
+        for (gi in graph_info){
+            var x_axis = [];
+            var y_axis = [];
+            for( x in graph_info[gi]){
+                if(gi == 'graph_type' || gi == 'id' ){
                     continue;
                 }else{
-                    differ_keys.push(y);
+                    console.log(x);
+                    console.log(graph_info[gi][x]);
+                    x_axis.push(x);
+                    y_axis.push(graph_info[gi][x]);
                 }
             }
-        }
-
-        for(i=0; i<differ_keys.length; i++){
-            y_axis = []
-            for(x in graph_info['count']){
-                if(differ_keys[i] in graph_info['count'][x]){
-                    y_axis.push(graph_info['count'][x][differ_keys[i]]);
-                }else{
-                    y_axis.push(0);
-                }
-            }
-
             trace = {};
-            color = getRandomColor();
+            r = getRandomIntInclusive(0,254);
+            g = getRandomIntInclusive(0,254);
+            b = getRandomIntInclusive(0,254);
             trace = {
                 x: x_axis,
                 y: y_axis,
-                name: differ_keys[i],
+                name: gi,
                 type: 'bar',
                 marker: {
-                color: color // Adding color values
+                  color: 'rgb('+r+','+g+','+b+')' // Adding color values
                 }
-            };
-            data.push(trace);
+              };
+              data.push(trace);
+        }
+    }else{
+        x_axis = [];
+        y_axis = [];
+        for (x in graph_info){
+            if(x == 'graph_type' || x == 'id' ){
+                continue;
+            }else{
+                x_axis.push(x);
+                y_axis.push(graph_info[x]);
+            }
         }
 
-
-
-    }else{
-
-        xy_axis = generate_x_y_axis(graph_info['count']);
-        x_axis = xy_axis[0];
-        y_axis = xy_axis[1];
-
+        r = getRandomIntInclusive(0,254);
+        g = getRandomIntInclusive(0,254);
+        b = getRandomIntInclusive(0,254);
         var data = [
             {
               x: x_axis,
               y: y_axis,
               type: 'bar',
               marker: {
-                color: color // Adding color values
+                color: 'rgb('+r+','+g+','+b+')' // Adding color values
               }
             }
           ];
     }
-
     updatemenus= [{
-            y: 1.3,
-            yanchor: 'top',
-            x:0,
-            xanchor:"left",
-            pad:{"r": 10, "t": 10},
-            buttons: [{
-                method: 'relayout',
-                args: [{"yaxis.type": "linear"}],
-                label: 'Linear'
-            },{
-                method: 'relayout',
-                args: [{"yaxis.type": "log"}],
-                label: 'Log'
-            }]
+        y: 1.3,
+        yanchor: 'top',
+        x:0,
+        xanchor:"left",
+        pad:{"r": 10, "t": 10},
+        buttons: [{
+            method: 'relayout',
+            args: [{"yaxis.type": "linear"}],
+            label: 'Linear'
+        },{
+            method: 'relayout',
+            args: [{"yaxis.type": "log"}],
+            label: 'Log'
         }]
+    }]
+
 
     var layout = {
-            title: graph_name,
-            updatemenus:updatemenus,
-            barmode:'stack'
-    };
+        title: graph_name,
+        updatemenus:updatemenus,
+        barmode:'stack'
+};
 
-    var config = {responsive: true}
+var config = {responsive: true}
 
+
+    
     Plotly.newPlot('graph_body'+id, data, layout, config);
-    myDiv = document.getElementById('graph_body'+id);
 
-    if(stack_count[graph_name]){
-        drill_down_stacked(myDiv, graph_info, graph_name)
-    }else{
-        drill_down(myDiv, graph_info, graph_name);
-    }
 }
 
-
 // Code for scatterchart
-function scatterchart_generator(graph_name, graph_info, color){
-
-    xy_axis = generate_x_y_axis(graph_info['count']);
-    x_axis = xy_axis[0];
-    y_axis = xy_axis[1];
-
+function scatterchart_generator(graph_name, graph_info, id){
+    x_axis = [];
+    y_axis = [];
+    for (x in graph_info){
+            x_axis.push(x);
+            y_axis.push(graph_info[x]);
+        
+    }
+    //Generating color values
+    r = getRandomIntInclusive(0,254);
+    g = getRandomIntInclusive(0,254);
+    b = getRandomIntInclusive(0,254);
     var data = [
         {
           x: x_axis,
@@ -204,7 +183,7 @@ function scatterchart_generator(graph_name, graph_info, color){
           mode: 'markers',
           type: 'scatter',
           marker: {
-            color: color // Adding color values
+            color: 'rgb('+r+','+g+','+b+')' // Adding color values
           }
         }
       ];
@@ -216,33 +195,29 @@ function scatterchart_generator(graph_name, graph_info, color){
     var config = {responsive: true}
     
     Plotly.newPlot('graph_body'+id, data, layout, config);
-    myDiv = document.getElementById('graph_body'+id);
 
-    drill_down(myDiv, graph_info, graph_name);
 }
 
 // Code for piechart
-function piechart_generator(graph_name, graph_info){
+function piechart_generator(graph_name, graph_info, id){
     x_axis = [];
     y_axis = [];
-    for (x in graph_info['count']){
 
+    for (x in graph_info){
+        
             x_axis.push(x);
-            y_axis.push(graph_info['count'][x]);
+            y_axis.push(graph_info[x]);
         
     }
-    
     colors_num = x_axis.length;
     colors_list = []
 
     // Generating color values
     for( i=0; i<colors_num; i++ ){
-        
-        color = getRandomColor();
-        while(colors_list.indexOf(color) != -1){
-            color = getRandomColor();
-        }
-        colors_list.push(color);
+        r = getRandomIntInclusive(0,255);
+        g = getRandomIntInclusive(0,255);
+        b = getRandomIntInclusive(0,255);
+        colors_list.push('rgb('+r+','+g+','+b+')');
     }
 
     var data = [
@@ -263,25 +238,29 @@ function piechart_generator(graph_name, graph_info){
     var config = {responsive: true}
     
     Plotly.newPlot('graph_body'+id, data, layout, config);
-    myDiv = document.getElementById('graph_body'+id);
 
-    drill_down_pie(myDiv, graph_info, graph_name);
 }
 
 // Code for linechart
-function linechart_generator(graph_name, graph_info, color){
-
-    xy_axis = generate_x_y_axis(graph_info['count']);
-    x_axis = xy_axis[0];
-    y_axis = xy_axis[1];
-
+function linechart_generator(graph_name, graph_info, id){
+    x_axis = [];
+    y_axis = [];
+    for (x in graph_info){
+            x_axis.push(x);
+            y_axis.push(graph_info[x]);
+        
+    }
+    // Generating color values
+    r = getRandomIntInclusive(0,254);
+    g = getRandomIntInclusive(0,254);
+    b = getRandomIntInclusive(0,254);
     var data = [
         {
           x: x_axis,
           y: y_axis,
           type: 'scatter',
           marker: {
-            color: color // Adding random color values
+            color: 'rgb('+r+','+g+','+b+')' // Adding random color values
           }
         }
       ];
@@ -291,109 +270,11 @@ function linechart_generator(graph_name, graph_info, color){
     };
 
     var config = {responsive: true}
-
+    
     Plotly.newPlot('graph_body'+id, data, layout, config);
-    myDiv = document.getElementById('graph_body'+id);
 
-    drill_down(myDiv, graph_info, graph_name);
 }
 
-// Generate x and y axis
-function generate_x_y_axis(graph_info){
-
-    x_axis = [];
-    y_axis = [];
-
-    var sortable = [];
-    for (var x in graph_info) {
-        sortable.push([x, graph_info[x]]);
-    }
-
-    sortable.sort(function(a, b) {
-        return a[1] - b[1];
-    });
-
-    var objSorted = {}
-    sortable.forEach(function(item){
-        objSorted[item[0]]=item[1]
-    });
-
-    for (x in objSorted){
-        
-            x_axis.push(x);
-            y_axis.push(objSorted[x]);
-    }
-
-    return [x_axis, y_axis];
-}
-
-
-function drill_down(myDiv, graph_info, graph_name){
-
-    myDiv.on('plotly_click', function(data){
-        if('list' in graph_info){
-            
-            $('#drillDown').modal('toggle');
-            lists_output = graph_info['list'][data['points'][0]['x']];
-            html_output = '';
-            for (output in lists_output){
-                html_output = html_output + '<center>'+lists_output[output]+'</center><br/>';
-            }
-            $('#drillDownTitle').append(graph_name+': '+data['points'][0]['x']);
-            $('#modalBodyDrillDown').append(html_output);
-            html_output='';
-
-        }
-    });
-}
-
-function drill_down_stacked(myDiv, graph_info, graph_name){
-
-    myDiv.on('plotly_click', function(data){
-        if('list' in graph_info){
-
-            html_output = '';
-            title = '';
-
-            lists_output = graph_info['list'][data['points'][0]['x']];
-
-            $('#drillDown').modal('toggle');
-
-            for(i in lists_output){
-                html_output = html_output + '<center><b>'+i+'</b></center><br/>'
-                for(x in lists_output[i]){
-                    html_output = html_output + '<center>'+lists_output[i][x]+'</center><br/>';
-                }
-                
-            }
-            
-            console.log(html_output);
-            $('#drillDownTitle').append(graph_name+': '+data['points'][0]['x']);
-            $('#modalBodyDrillDown').append(html_output);
-            html_output='';
-
-        }
-    });
-}
-
-function drill_down_pie(myDiv, graph_info, graph_name){
-
-    myDiv.on('plotly_click', function(data){
-        if('list' in graph_info){
-
-            $('#drillDown').modal('toggle');
-            lists_output = graph_info['list'][data['points'][0]['label']];
-            html_output = '';
-            for (output in lists_output){
-                html_output = html_output + '<center>'+lists_output[output]+'</center><br/>';
-            }
-            $('#drillDownTitle').append(graph_name+': '+data['points'][0]['label']);
-            $('#modalBodyDrillDown').append(html_output);
-            html_output='';
-
-        }
-    });
-}
 
 function generate_text(g_id, g_value){
     $('#info_text_id'+g_id).text(g_value);

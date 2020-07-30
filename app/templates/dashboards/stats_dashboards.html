@@ -111,13 +111,7 @@
                                 <li class="breadcrumb-item"><a href="javascript:void(0)">Connected</a></li>
                                 <li class="breadcrumb-item active">{{server}}</li>
                             </ol>
-                            {% if db is sameas true%}
-                            <button type="button" class="btn btn-outline-info d-lg-block m-l-15"> Database </button>
-                            {% endif %}
-                            {% if db is sameas false %}
                             <button type="button" class="btn btn-outline-info d-lg-block m-l-15"> API </button>
-                            {% endif %}
-                            
                         </div>
                     </div>
                 </div>
@@ -158,23 +152,6 @@
                     </div>
                     {% endfor %}
                     <!-- Graph plotting End -->
-                <!-- Modal start for drill down data-->
-                    <div class="modal fade" id="drillDown" tabindex="-1" role="dialog" aria-labelledby="drillDownTile" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="drillDownTitle"></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                </div>
-                                <div class="modal-body" id="modalBodyDrillDown">
-                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <!-- Modal end for drill down data -->
                 </div>
             </div>
             <!-- Project List Start -->
@@ -208,9 +185,6 @@
                 <div class="row">
                     {% for j in i%}
                         <div class="col-lg-3">
-                            {% if db is sameas true%}
-                            <a href="/dashboards/db/project/{{j}}" target="_blank"> 
-                            {% endif %}
                             {% if db is sameas false%}
                             <a href="/dashboards/project/{{j}}" target="_blank"> 
                             {% endif %}
