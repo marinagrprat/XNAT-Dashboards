@@ -3,6 +3,7 @@ from flask import Flask, redirect
 from app.dashboards.controllers import dashboards
 from app.auth.controllers import auth
 
+
 # Define the WSGI application object
 app = Flask(__name__)
 
