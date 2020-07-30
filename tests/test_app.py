@@ -74,7 +74,7 @@ def test_dashboard_db(mocker):
     response_get_pp = app.test_client().\
         get('dashboards/db/project/CENTRAL_OASIS_CS').status_code
 
-    assert response_get_pp == 200
+    assert response_get_pp == 302  # Redirect to login
 
     assert response_post == 200
 

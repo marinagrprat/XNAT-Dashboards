@@ -2,7 +2,6 @@
 from flask import Blueprint, render_template, session, request,\
     redirect, url_for
 from saved_data_processing import graph_generator_DB, graph_generator_pp_DB
-from realtime_data_processing import graph_generator_pp, graph_generator
 from app.init_database import mongo
 from app.dashboards import model
 
@@ -17,7 +16,6 @@ password = ''  # For saving password globally
 server = ''  # For saving server url globally
 ssl = ''  # For saving username globally
 role_exist = ''
-db = False  # For specifying that connected to DB or pickle
 
 
 # Logout route
@@ -35,20 +33,14 @@ def logout():
 
     if 'username' in session:
         del session['username']
+
     session['error'] = -1
 
-    global db
-    if db:
-        db = False
-        return redirect(url_for('auth.login_DB'))
-    else:
-        return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.login_DB'))
 
 
 @dashboards.route('/db/stats/', methods=['GET', 'POST'])
 def stats_db():
-    global db
-    db = True
 
     if request.method == 'POST':
         global username, server
@@ -107,7 +99,7 @@ def stats_db():
                                    project_list_ow_co_me=project_list_ow_co_me,
                                    username=username.capitalize(),
                                    server=server,
-                                   db=db)
+                                   db=True)
 
     else:
         # If user reloads page
@@ -126,7 +118,7 @@ def stats_db():
                                    project_list_ow_co_me=project_list_ow_co_me,
                                    username=username.capitalize(),
                                    server=server,
-                                   db=db)
+                                   db=True)
 
 
 # this route give the details of the project
@@ -176,7 +168,7 @@ def project_db(id):
         stats_data=stats_data,
         username=username.capitalize(),
         server=server,
-        db=db,
+        db=True,
         members=members,
         users=users,
         collaborators=collaborators,
