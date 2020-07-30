@@ -1,5 +1,5 @@
-[![pipeline status](https://gitlab.com/Udolf47/xnat_dashboards/badges/development/pipeline.svg)](https://gitlab.com/Udolf47/xnat_dashboards/-/commits/development)
-[![coverage report](https://gitlab.com/Udolf47/xnat_dashboards/badges/development/coverage.svg)](https://gitlab.com/Udolf47/xnat_dashboards/-/commits/development)
+[![pipeline status](https://gitlab.com/Udolf47/xnat_dashboards/badges/development_MONGO_DB/pipeline.svg)](https://gitlab.com/Udolf47/xnat_dashboards/-/commits/development_MONGO_DB)
+[![coverage report](https://gitlab.com/Udolf47/xnat_dashboards/badges/development_MONGO_DB/coverage.svg)](https://gitlab.com/Udolf47/xnat_dashboards/-/commits/development_MONGO_DB)
 
 
 # XNAT Dashboards
@@ -12,7 +12,7 @@ This project is about creating a responsive dashboard framework for extensive ex
 - Username and Password for that xnat instance.
 - If no local instance available you can register at [CENTRAL](https://central.xnat.org)
 - Graph type assignment file present in util/graph_type.json
-- [MongoDB Instance](https://www.mongodb.com/) or save data using pickle
+- [MongoDB Instance](https://www.mongodb.com/)
 
 ## Getting Started
 
