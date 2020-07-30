@@ -61,8 +61,6 @@ def stats():
         if graph_data_stats == [] or type(graph_data_stats) == int:
             session['error'] = graph_data_stats
             return redirect(url_for('auth.login'))
-        elif db:
-            return redirect(url_for('dashboards.stats_db'))
         else:
             project_list = project_lists[0]
             project_list_ow_co_me = project_lists[1]
