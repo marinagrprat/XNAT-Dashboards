@@ -127,8 +127,8 @@ class DataFilterPP(DataFilter):
             If the key and value doesn't represent a graph further
             processing will be done.
 
-            {Graph1_name : { count:{x_axis_values: y_axis_values},
-                            list:{x_axis_values: y_list} },
+            {ordered_graph_name : { count:{x_axis_values: y_axis_values},
+            list:{x_axis_values: y_list} },
             Data_name: {other information to be sent to frontend}}
         """
 

@@ -303,7 +303,7 @@ class Formatter:
 
         Returns:
             dict/int: If resource exist then a dict with the corresponding data
-                else -1.
+            else -1.
 
             For each graph this format is used
             {"count": {"x": "y"}, "list": {"x": "list"}}
@@ -513,8 +513,8 @@ class Formatter:
             x_new (str): The new name which will be shown on X axis of graph
 
         Returns:
-             Dict: For each graph this format is used
-                {"count": {"x": "y"}, "list": {"x": "list"}}
+            Dict: For each graph this format is used
+            {"count": {"x": "y"}, "list": {"x": "list"}}
         """
         per_list = [[item[property_x], item[property_y]] for item in data]
 

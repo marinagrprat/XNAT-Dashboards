@@ -28,13 +28,15 @@ class GraphGenerator:
         data (dict): Dict containing data of projects, subjects, exp.,
             scans, resources, extra_resources, longitudinal data
     """
-    pickle_data = {}
-    project_list = []
-    project_list_ow_co_me = []
-    l_data = {}
 
     def __init__(
             self, username, role, pickle_data, project_visible=[]):
+
+        self.pickle_data = {}
+        self.project_list = []
+        self.project_list_ow_co_me = []
+        # Longitudinal data -> l_data
+        self.l_data = {}
 
         self.filtered = data_filter.DataFilter(
             username, pickle_data['info'],

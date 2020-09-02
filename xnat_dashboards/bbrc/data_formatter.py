@@ -110,7 +110,7 @@ class Formatter:
 
         Returns:
             dict/int: If resource exist then a dict with the corresponding data
-                else -1.
+            else -1.
 
             For each graph this format is used
             {"count": {"x": "y"}, "list": {"x": "list"}}

@@ -41,7 +41,7 @@ class DataFilter:
                 scans.
         Returns:
             dict: resources belonging to the project that
-                should be visible as per role and user.
+            should be visible as per role and user.
         """
         # Method to restrict access to projects details
         # based on role of the user
@@ -230,7 +230,7 @@ class DataFilterPP(DataFilter):
             processing will be done.
 
             {Graph1_name : { count:{x_axis_values: y_axis_values},
-                            list:{x_axis_values: y_list} },
+            list:{x_axis_values: y_list} },
             Data_name: {other project view data to be sent to frontend}}
         """
 
