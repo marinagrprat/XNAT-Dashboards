@@ -33,6 +33,13 @@ GSOC 2020
 =======================
 :doc:`gsoc`
 
+Heroku Example
+==============
+
+| Server: `Heroku <https://xnat-dashboards.herokuapp.com/>`_
+| Username: **testUser**
+| Password: **testPassword**
+
 Learn more about Xnat Dashboards
 ================================
 
